@@ -3,12 +3,15 @@ package control.boss;
 /*
  * @Author: NgojcDev
  */
+
 import consts.AppearType;
 import consts.BossStatus;
 import consts.BossType;
 import consts.ConstPlayer;
 import network.Message;
+
 import java.util.List;
+
 import map.Zone;
 import mob.Mob;
 import player.Pet;
@@ -26,12 +29,15 @@ import utils.Logger;
 import utils.SkillUtil;
 import utils.Util;
 import interfaces.IBoss;
+
 import java.io.IOException;
+
 import services.ChatGlobalService;
 
 //
 public class Boss extends Player implements IBoss {
 
+    private static final long TIME_NOTIFY = 15 * 60 * 1000;
     public int currentLevel = -1;
     public final BossData[] data;
 
@@ -123,34 +129,20 @@ public class Boss extends Player implements IBoss {
         this.secondsRest = this.data[0].getSecondsRest();
         this.bossStatus = BossStatus.REST;
         switch (bossType) {
-            case YARDART ->
-                YardartManager.gI().addBoss(this);
-            case FINAL ->
-                FinalBossManager.gI().addBoss(this);
-            case SKILLSUMMONED ->
-                SkillSummonedManager.gI().addBoss(this);
-            case BROLY ->
-                BrolyManager.gI().addBoss(this);
-            case PHOBAN ->
-                OtherBossManager.gI().addBoss(this);
-            case PHOBANDT ->
-                RedRibbonHQManager.gI().addBoss(this);
-            case PHOBANBDKB ->
-                TreasureUnderSeaManager.gI().addBoss(this);
-            case PHOBANCDRD ->
-                SnakeWayManager.gI().addBoss(this);
-            case PHOBANKGHD ->
-                GasDestroyManager.gI().addBoss(this);
-            case TRUNGTHU_EVENT ->
-                TrungThuEventManager.gI().addBoss(this);
-            case HALLOWEEN_EVENT ->
-                HalloweenEventManager.gI().addBoss(this);
-            case CHRISTMAS_EVENT ->
-                ChristmasEventManager.gI().addBoss(this);
-            case HUNGVUONG_EVENT ->
-                HungVuongEventManager.gI().addBoss(this);
-            case TET_EVENT ->
-                LunarNewYearEventManager.gI().addBoss(this);
+            case YARDART -> YardartManager.gI().addBoss(this);
+            case FINAL -> FinalBossManager.gI().addBoss(this);
+            case SKILLSUMMONED -> SkillSummonedManager.gI().addBoss(this);
+            case BROLY -> BrolyManager.gI().addBoss(this);
+            case PHOBAN -> OtherBossManager.gI().addBoss(this);
+            case PHOBANDT -> RedRibbonHQManager.gI().addBoss(this);
+            case PHOBANBDKB -> TreasureUnderSeaManager.gI().addBoss(this);
+            case PHOBANCDRD -> SnakeWayManager.gI().addBoss(this);
+            case PHOBANKGHD -> GasDestroyManager.gI().addBoss(this);
+            case TRUNGTHU_EVENT -> TrungThuEventManager.gI().addBoss(this);
+            case HALLOWEEN_EVENT -> HalloweenEventManager.gI().addBoss(this);
+            case CHRISTMAS_EVENT -> ChristmasEventManager.gI().addBoss(this);
+            case HUNGVUONG_EVENT -> HungVuongEventManager.gI().addBoss(this);
+            case TET_EVENT -> LunarNewYearEventManager.gI().addBoss(this);
         }
 
         this.bossAppearTogether = new Boss[this.data.length][];
@@ -304,6 +296,8 @@ public class Boss extends Player implements IBoss {
         super.update();
     }
 
+    public long lastTimeNotify;
+
     @Override
     public void update() {
         if (prepareBom) {
@@ -315,19 +309,23 @@ public class Boss extends Player implements IBoss {
                 || (this.newSkill != null && this.newSkill.isStartSkillSpecial)) {
             return;
         }
-        switch (this.bossStatus) {
-            case CHAT_S, AFK, ACTIVE ->
-                this.autoLeaveMap();
+//        switch (this.bossStatus) {
+//            case CHAT_S, AFK, ACTIVE ->
+//                this.autoLeaveMap();
+//        }
+        if (Util.canDoWithTime(lastTimeNotify, TIME_NOTIFY)) {
+            if (bossStatus == BossStatus.REST) {
+                changeStatus(BossStatus.RESPAWN);
+            }
+            lastTimeNotify = System.currentTimeMillis();
         }
         switch (this.bossStatus) {
-            case REST ->
-                this.rest();
+            case REST -> this.rest();
             case RESPAWN -> {
                 this.respawn();
                 this.changeStatus(BossStatus.JOIN_MAP);
             }
-            case JOIN_MAP ->
-                this.joinMap();
+            case JOIN_MAP -> this.joinMap();
             case CHAT_S -> {
                 if (chatS()) {
                     this.doneChatS();
@@ -338,8 +336,7 @@ public class Boss extends Player implements IBoss {
                     }
                 }
             }
-            case AFK ->
-                this.afk();
+            case AFK -> this.afk();
             case ACTIVE -> {
                 this.chatM();
                 if (this.effectSkill.isCharging && !Util.isTrue(1, 20) || this.effectSkill.useTroi) {
@@ -347,16 +344,14 @@ public class Boss extends Player implements IBoss {
                 }
                 this.active();
             }
-            case DIE ->
-                this.changeStatus(BossStatus.CHAT_E);
+            case DIE -> this.changeStatus(BossStatus.CHAT_E);
             case CHAT_E -> {
                 if (chatE()) {
                     this.doneChatE();
                     this.changeStatus(BossStatus.LEAVE_MAP);
                 }
             }
-            case LEAVE_MAP ->
-                this.leaveMap();
+            case LEAVE_MAP -> this.leaveMap();
         }
     }
 

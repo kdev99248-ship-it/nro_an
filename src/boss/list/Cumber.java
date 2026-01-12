@@ -36,7 +36,7 @@ public class Cumber extends Boss {
                     this.location.x, this.zone.map.yPhysicInTop(this.location.x, this.location.y - 24), plKill.id));
         }
 
-        if (Util.isTrue(20, 100)) {
+        if (Util.isTrue(30, 100)) {
             ItemMap it = ItemService.gI().randDoTL(this.zone, 1, this.location.x,
                     this.zone.map.yPhysicInTop(this.location.x,
                             this.location.y - 24),

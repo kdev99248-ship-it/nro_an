@@ -623,11 +623,11 @@ public class PlayerDAO {
                 dataArray.add(player.itemTime.iconMeal2);
                 dataArray.add((player.itemTime.isUsePetBuff ? (ItemTime.TIME_PET_BUFF - (System.currentTimeMillis() - player.itemTime.lastTimeUsePetBuff)) : 0));
                 dataArray.add((player.itemTime.isUseNCD ? (ItemTime.TIME_NCD - (System.currentTimeMillis() - player.itemTime.lastTimeUseNCD)) : 0));
-                dataArray.add(0);
-                dataArray.add(0);
+                dataArray.add(player.itemTime.isUseBanhTrungThu ?  player.itemTime.timeUseBanhTrungThu : 0);
+                dataArray.add(player.itemTime.isUseBanhTrungThu ?  (player.itemTime.timeUseBanhTrungThu - (System.currentTimeMillis() - player.itemTime.lastTimeUseBanhTrungThu)) : 0);
+                dataArray.add(player.itemTime.isUseBanhTrungThu ? player.itemTime.ttIcon : 0);
                 String itemTime = dataArray.toJSONString();
                 dataArray.clear();
-
                 // data nhiệm vụ
                 dataArray.add(player.playerTask.taskMain.id);
                 dataArray.add(player.playerTask.taskMain.index);

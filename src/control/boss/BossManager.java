@@ -112,7 +112,6 @@ public class BossManager implements Runnable {
 
     private static BossManager instance;
     public static byte ratioReward = 10;
-
     private static final Set<Integer> HIDDEN_SHOW_BOSS = Set.of(
             BossID.XINBATO_1,
             BossID.SOI_HEC_QUYN_1,
@@ -193,10 +192,9 @@ public class BossManager implements Runnable {
         this.createBoss(BossID.XINBATO_1, 10);
         this.createBoss(BossID.KID_BUU, 1);
         this.createBoss(BossID.KID_XEN, 1);
-        this.createBoss(BossID.BOSS_XUONG, 5);
-        this.createBoss(BossID.CHILLER_1,1);
-        this.createBoss(BossID.SUPER_PIC,2);
-        this.createBoss(BossID.BLACK_GOKU_ROSE,2);
+        this.createBoss(BossID.CHILLER_1, 1);
+        this.createBoss(BossID.SUPER_PIC, 2);
+        this.createBoss(BossID.BLACK_GOKU_ROSE, 2);
     }
 
     public void createBoss(int bossID, int total) {

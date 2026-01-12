@@ -15,19 +15,27 @@ import java.util.Arrays;
 
 import interfaces.ISessionAcceptHandler;
 import interfaces.INetwork;
+import java.net.ServerSocket;
+import java.net.SocketAddress;
 import utils.Logger;
 
 public class Network implements INetwork, Runnable {
 
     private static Network instance;
     private int port;
-    private ServerSocketChannel serverSocketChannel;
+//    private ServerSocketChannel serverSocketChannel;
+    private ServerSocket serverSocket;
     private Class sessionClone;
     private boolean start;
     private IServerClose serverClose;
     private ISessionAcceptHandler acceptHandler;
     private Thread loopServer;
     private Selector selector;
+    private static final int SERVER_FPS = 120;
+
+    public static long getServerFPS() {
+        return 1000 / SERVER_FPS;
+    }
 
     public static Network gI() {
         if (instance == null) {
@@ -44,7 +52,8 @@ public class Network implements INetwork, Runnable {
     @Override
     public INetwork init() {
         try {
-            this.selector = Selector.open();
+            this.serverSocket = new ServerSocket();
+//            this.selector = Selector.open();
         } catch (IOException ex) {
             Logger.errorln(ex.toString());
         }
@@ -65,11 +74,12 @@ public class Network implements INetwork, Runnable {
         }
         try {
             this.port = port;
-            this.serverSocketChannel = ServerSocketChannel.open();
-            this.serverSocketChannel.configureBlocking(false);
-            this.serverSocketChannel.socket().bind(new InetSocketAddress(port));
-            this.serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
-        } catch (IOException ex) {
+            this.serverSocket.bind(new InetSocketAddress("0.0.0.0", port));
+//            this.serverSocketChannel = ServerSocketChannel.open();
+//            this.serverSocketChannel.configureBlocking(false);
+//            this.serverSocketChannel.socket().bind(new InetSocketAddress(port));
+//            this.serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
+        } catch (Exception ex) {
             System.exit(0);
         }
         this.start = true;
@@ -80,10 +90,16 @@ public class Network implements INetwork, Runnable {
     @Override
     public INetwork close() {
         this.start = false;
-        if (this.serverSocketChannel != null) {
+//        if (this.serverSocketChannel != null) {
+//            try {
+//                this.serverSocketChannel.close();
+//            } catch (IOException ex) {
+//            }
+//        }
+        if (this.serverSocket != null) {
             try {
-                this.serverSocketChannel.close();
-            } catch (IOException ex) {
+                this.serverSocket.close();
+            } catch (IOException e) {
             }
         }
         if (this.serverClose != null) {
@@ -96,7 +112,8 @@ public class Network implements INetwork, Runnable {
     public INetwork dispose() {
         this.acceptHandler = null;
         this.loopServer = null;
-        this.serverSocketChannel = null;
+        this.serverSocket = null;
+//        this.serverSocketChannel = null;
         return this;
     }
 
@@ -110,18 +127,23 @@ public class Network implements INetwork, Runnable {
     public void run() {
         while (start) {
             try {
-                selector.select();
-                for (SelectionKey key : selector.selectedKeys()) {
-                    if (key.isAcceptable()) {
-                        ServerSocketChannel server = (ServerSocketChannel) key.channel();
-                        Socket socket = server.accept().socket();
-                        final ISession session = SessionFactory.gI().cloneSession(this.sessionClone, socket);
-                        this.acceptHandler.sessionInit(session);
-                        SessionManager.gI().putSession(session);
-                        Logger.log("Session connect - " + Arrays.toString(session.getKey()));
-                    }
-                }
-                selector.selectedKeys().clear();
+//                selector.select();
+//                for (SelectionKey key : selector.selectedKeys()) {
+//                    if (key.isAcceptable()) {
+//                        ServerSocketChannel server = (ServerSocketChannel) key.channel();
+//                        Socket socket = server.accept().socket();
+//                        final ISession session = SessionFactory.gI().cloneSession(this.sessionClone, socket);
+//                        this.acceptHandler.sessionInit(session);
+//                        SessionManager.gI().putSession(session);
+//                        Logger.log("Session connect - " + Arrays.toString(session.getKey()));
+//                    }
+//                }
+//                selector.selectedKeys().clear();
+                Socket socket = this.serverSocket.accept();
+                final ISession session = SessionFactory.gI().cloneSession(this.sessionClone, socket);
+                this.acceptHandler.sessionInit(session);
+                SessionManager.gI().putSession(session);
+                Logger.log("Session connect - " + session.getIP());
             } catch (IOException ex) {
             } catch (Exception ex2) {
                 Logger.errorln(ex2.toString());

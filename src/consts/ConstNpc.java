@@ -322,4 +322,5 @@ public class ConstNpc {
     public static final int MENU_DOI_TUI_MU = -29173211;
     public static final int MENU_UOC_RONG_XUONG = -279311;
     public static final int MENU_OPEN_HOP_QUA_VIP = -129821;
+    public static final int SHOP_HOANG_DUC = 87;
 }

@@ -126,7 +126,7 @@ public class AnTrom extends Boss {
                         Service.gI().stealMoney(pl, -gold);
                         this.stolenItemCount += gold;
                         this.lastTimeAnTrom = System.currentTimeMillis();
-                        ItemMap itemMap = new ItemMap(this.zone, 190, gold, (this.location.x + pl.location.x) / 2, this.location.y, this.id);
+                        ItemMap itemMap = new ItemMap(this.zone, 190, 100_000, (this.location.x + pl.location.x) / 2, this.location.y, this.id);
                         Service.gI().dropItemMap(this.zone, itemMap);
                         Service.gI().sendToAntherMePickItem(this, itemMap.itemMapId);
                         this.zone.removeItemMap(itemMap);

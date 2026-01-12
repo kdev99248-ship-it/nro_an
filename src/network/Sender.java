@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.NonNull;
 import interfaces.IMessageSendCollect;
 import interfaces.ISession;
+import static network.Network.getServerFPS;
 
 public final class Sender implements Runnable {
 
@@ -46,7 +47,7 @@ public final class Sender implements Runnable {
                         message.cleanup();
                     }
                 }
-                TimeUnit.MILLISECONDS.sleep(33); //~30FPS
+                TimeUnit.MILLISECONDS.sleep(getServerFPS()); //~30FPS
             }
         } catch (Exception ignored) {
         }

@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import interfaces.IMessageHandler;
 import interfaces.ISession;
+import static network.Network.getServerFPS;
 
 public class QueueHandler implements Runnable {
     private ISession session;
@@ -32,13 +33,13 @@ public class QueueHandler implements Runnable {
         try {
             while (session.isConnected()) {
                 while (!messages.isEmpty()) {
-                    Message message = messages.poll(5, TimeUnit.SECONDS);
+                    Message message = messages.poll(6, TimeUnit.SECONDS);
                     if (message != null) {
                         this.messageHandler.onMessage(this.session, message);
                         message.cleanup();
                     }
                 }
-                TimeUnit.MILLISECONDS.sleep(FPS_SERVER); //~30FPS
+                TimeUnit.MILLISECONDS.sleep(getServerFPS()); //~30FPS
             }
         } catch (Exception ignored) {
         }

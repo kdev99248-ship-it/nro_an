@@ -3,7 +3,6 @@ package database;
 /*
  * @Author: NgojcDev
  */
-
 import radar.OptionCard;
 import radar.Card;
 import database.AlyraManager;
@@ -184,9 +183,12 @@ public class NDVSqlFetcher {
             player.gender = rs.getByte("gender");
             if (player.head == -1) {
                 switch (player.gender) {
-                    case 0 -> player.head = 64;
-                    case 1 -> player.head = 9;
-                    case 2 -> player.head = 6;
+                    case 0 ->
+                        player.head = 64;
+                    case 1 ->
+                        player.head = 9;
+                    case 2 ->
+                        player.head = 6;
                 }
             }
             player.haveTennisSpaceShip = rs.getBoolean("have_tennis_space_ship");
@@ -573,6 +575,9 @@ public class NDVSqlFetcher {
             int iconMeal2 = 0;
             int timePetBuff = 0;
             int timeUseNCD = 0;
+            int timeUseBanhTrungThu = 0;
+            long lastTimeUseBanhTrungThu = 0;
+            int icontt = 0;
             int timeBoHuyet = Integer.parseInt(String.valueOf(dataArray.get(0)));
             int timeBoHuyet2 = Integer.parseInt(String.valueOf(dataArray.get(1)));
             int timeBoKhi = Integer.parseInt(String.valueOf(dataArray.get(2)));
@@ -628,6 +633,19 @@ public class NDVSqlFetcher {
             if (dataArray.size() > 24) {
                 timeUseNCD = Integer.parseInt(String.valueOf(dataArray.get(24)));
             }
+
+            if (dataArray.size() > 25) {
+                timeUseBanhTrungThu = Integer.parseInt(String.valueOf(dataArray.get(25)));
+            }
+            if (dataArray.size() > 26) {
+                lastTimeUseBanhTrungThu = Integer.parseInt(String.valueOf(dataArray.get(26)));
+            }
+            if(dataArray.size() > 27){
+                icontt = Integer.parseInt(String.valueOf(dataArray.get(27)));
+            }
+            player.itemTime.ttIcon = icontt;
+            player.itemTime.lastTimeUseBanhTrungThu = System.currentTimeMillis() - (timeUseBanhTrungThu - lastTimeUseBanhTrungThu);
+            player.itemTime.timeUseBanhTrungThu = timeUseBanhTrungThu;
             player.itemTime.lastTimeUseCoBonLa = System.currentTimeMillis() - (ItemTime.TIME_EAT_CO_BON_LA - timeEatCoBonLa);
             player.itemTime.lastTimeBoHuyet = System.currentTimeMillis() - (ItemTime.TIME_ITEM - timeBoHuyet);
             player.itemTime.lastTimeBoKhi = System.currentTimeMillis() - (ItemTime.TIME_ITEM - timeBoKhi);
@@ -679,6 +697,7 @@ public class NDVSqlFetcher {
             player.itemTime.iconMeal2 = iconMeal2;
             player.itemTime.isEatMeal2 = timeMeal2 != 0;
             player.itemTime.isUseNCD = timeUseNCD != 0;
+            player.itemTime.isUseBanhTrungThu = lastTimeUseBanhTrungThu != 0;
             dataArray.clear();
 
             // data nhiệm vụ
@@ -862,7 +881,8 @@ public class NDVSqlFetcher {
                         skill.currLevel = Short.parseShort(String.valueOf(skillTemp.get(3)));
                     }
                     switch (skill.template.id) {
-                        case Skill.KAMEJOKO, Skill.MASENKO, Skill.ANTOMIC -> skill.coolDown = 1000;
+                        case Skill.KAMEJOKO, Skill.MASENKO, Skill.ANTOMIC ->
+                            skill.coolDown = 1000;
                     }
                     pet.playerSkill.skills.add(skill);
                 }

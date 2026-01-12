@@ -3,7 +3,6 @@ package boss.list;
 /*
  * @Author: NgojcDev
  */
-
 import control.boss.Boss;
 import control.boss.BossData;
 import control.boss.BossManager;
@@ -33,11 +32,12 @@ public class NhanBan extends Boss {
         this.isCopy = true;
     }
 
+    int[] rewardList = new int[]{1151,1152,1150,1153,1154};
     @Override
     public void reward(Player plKill) {
-        ItemMap it = new ItemMap(zone, 638, 1, this.location.x, this.location.y, plKill.id);
+        int rdnx = Util.nextInt(0, rewardList.length - 1);
+        ItemMap it = new ItemMap(zone, rewardList[rdnx], 1, this.location.x, this.location.y, plKill.id);
         it.options.clear();
-        it.options.add(new Item.ItemOption(93, 30));
         it.options.add(new Item.ItemOption(30, 0));
         Service.gI().dropItemMap(this.zone, it);
     }
@@ -92,7 +92,7 @@ public class NhanBan extends Boss {
                     if (Util.isTrue(15, ConstRatio.PER100) && SkillUtil.isUseSkillChuong(this)) {
                         goToXY(playerAtt.location.x + (Util.getOne(-1, 1) * Util.nextInt(20, 80)),
                                 Util.nextInt(10) % 2 == 0 ? playerAtt.location.y
-                                        : playerAtt.location.y - Util.nextInt(0, 50),
+                                : playerAtt.location.y - Util.nextInt(0, 50),
                                 false);
                     }
                     SkillService.gI().useSkill(this, playerAtt, null, -1, null);

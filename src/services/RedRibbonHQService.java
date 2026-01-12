@@ -41,11 +41,11 @@ public class RedRibbonHQService {
             Service.gI().sendThongBao(pl, "Không thể thực hiện");
             return;
         }
-        if (pl.clan.haveGoneDoanhTrai && !Util.isAfterMidnight(pl.clan.lastTimeOpenDoanhTrai)) {
+        if (!pl.getSession().isAdmin && pl.clan.haveGoneDoanhTrai && !Util.isAfterMidnight(pl.clan.lastTimeOpenDoanhTrai)) {
             Service.gI().sendThongBao(pl, "Vui lòng chờ đến ngày mai");
             return;
         }
-        if (pl.clanMember.getNumDateFromJoinTimeToToday() < 1) {
+        if (!pl.getSession().isAdmin && pl.clanMember.getNumDateFromJoinTimeToToday() < 1) {
             return;
         }
         if (pl.clan.doanhTrai != null) {

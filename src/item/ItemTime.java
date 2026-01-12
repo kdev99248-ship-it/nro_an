@@ -9,6 +9,7 @@ import player.Player;
 import services.Service;
 import utils.Util;
 import services.ItemTimeService;
+import utils.Logger;
 
 public class ItemTime {
 
@@ -97,6 +98,11 @@ public class ItemTime {
     // Buff đệ tử x2 tiềm năng và sức mạnh
     public boolean isUsePetBuff;
     public long lastTimeUsePetBuff;
+    
+    public boolean isUseBanhTrungThu;
+    public long lastTimeUseBanhTrungThu;
+    public long timeUseBanhTrungThu;
+    public int ttIcon;
 
     public ItemTime(Player player) {
         this.player = player;
@@ -106,6 +112,11 @@ public class ItemTime {
         if (isUseCoBonLa) {
             if (Util.canDoWithTime(lastTimeUseCoBonLa, TIME_EAT_CO_BON_LA)) {
                 isUseCoBonLa = false;
+            }
+        }
+        if(isUseBanhTrungThu){
+            if (Util.canDoWithTime(lastTimeUseBanhTrungThu, timeUseBanhTrungThu)) {
+                isUseBanhTrungThu = false;
             }
         }
         if (isEatMeal) {

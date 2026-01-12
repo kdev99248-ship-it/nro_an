@@ -451,7 +451,6 @@ public class NPoint {
         setSpeed();
     }
 
-
     private void addOption(ItemOption io) {
         switch (io.optionTemplate.id) {
             case 0: // Tấn công +#
@@ -870,7 +869,10 @@ public class NPoint {
             hpMax *= 2;
         }
         if (this.player.itemTime != null && this.player.itemTime.isUseBoHuyet2) {
-            hpMax += (hpMax / 100 * 120); // +120% HP
+            hpMax += (hpMax / 100 * 20); // +120% HP
+        }
+        if (this.player.itemTime != null && this.player.itemTime.isUseBanhTrungThu) {
+            hpMax += (hpMax / 100 * 15);
         }
         // Xử lý huýt sáo
         if (!this.player.isPet || (this.player.isPet && ((Pet) this.player).status != Pet.FUSION)) {
@@ -977,7 +979,10 @@ public class NPoint {
 
         // Xử lý item siêu cấp (bao gồm cả item cũ 1101 và item mới 1151)
         if (this.player.itemTime != null && this.player.itemTime.isUseBoKhi2) {
-            mpMax += (mpMax / 100 * 120); // +120% KI
+            mpMax += (mpMax / 100 * 20); // +120% KI
+        }
+        if (this.player.itemTime != null && this.player.itemTime.isUseBanhTrungThu) {
+            mpMax += (mpMax / 100 * 15);
         }
 
         if (mpMax > 2_000_000_000) {
@@ -1025,7 +1030,6 @@ public class NPoint {
         // for (Integer tl : this.tlSDDep) {
         // dame += (dame * tl / 100L);
         // }
-
         // Xử lý chỉ số hợp thể đệ tử
         if (this.player.isPet && (((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA
                 || ((Pet) this.player).master.fusion.typeFusion == ConstPlayer.HOP_THE_PORATA2
@@ -1086,7 +1090,10 @@ public class NPoint {
         }
         // Xử lý cuồng nộ cấp 2 (bao gồm cả item cũ 1099 và item mới 1150)
         if (this.player.itemTime != null && this.player.itemTime.isUseCuongNo2) {
-            dame += (dame / 100 * 120); // +120% sức đánh gốc
+            dame += (dame / 100 * 20); // +120% sức đánh gốc
+        }
+        if (this.player.itemTime != null && this.player.itemTime.isUseBanhTrungThu) {
+            dame += (dame / 100 * 15); // +120% sức đánh gốc
         }
 
         // Xử lý ngọc rồng đen 1 sao
@@ -1334,8 +1341,6 @@ public class NPoint {
                 percentDameSkill = skillSelect.damage;
                 break;
             case Skill.MASENKO:
-
-                // Đặt giá trị mặc định cho sát thương bổ sung từ nội tại
                 if (intrinsic != null && intrinsic.id == 9) {
                     percentXDame += (byte) intrinsic.param1; // Cộng sát thương từ nội tại vào percentXDame
                 }
@@ -1344,10 +1349,8 @@ public class NPoint {
                     percentXDame += 80;
                 }
 
-                // Sử dụng sát thương tổng từ percentXDame
                 percentDameSkill = skillSelect.damage + percentXDame;
                 break;
-
             case Skill.LIEN_HOAN:
                 if (intrinsic.id == 13) {
                     percentDameIntrinsic = intrinsic.param1;
@@ -1369,12 +1372,11 @@ public class NPoint {
                 isCritTele = true;
                 dameAttack = Util.nextInt((int) Math.min(2_000_000_000L, (dameAttack - (dameAttack / 100 * 5))),
                         (int) Math.min(2_000_000_000L, (dameAttack + (dameAttack / 100 * 5))));
-                this.dameAfter += skillSelect.damage;
                 this.percentDameIntrinsic += intrinsic.param1;
                 return dameAttack;
             case Skill.MAKANKOSAPPO:
                 percentDameSkill = skillSelect.damage;
-                int dameSkill = (int) Math.min(2_000_000_000L, this.mpMax * percentDameSkill / 100);
+                int dameSkill = (int) Math.min(2_000_000_000L, Math.max(1, this.mpMax / 100L) * percentDameSkill);
                 if (this.player.setClothes.picolo == 5) {
                     dameSkill = (int) (dameSkill * 1.8);
                 } else {
@@ -1411,15 +1413,11 @@ public class NPoint {
                 // Giảm damage tổng thể 50%
                 dameqckk = dameqckk * 50 / 100;
 
-                // Giảm thêm damage cap tối đa
-                if (dameqckk > 500_000_000) { // Giảm từ 2 tỷ xuống 500 triệu
-                    dameqckk = 500_000_000;
-                }
-
                 // Thêm giới hạn damage tối thiểu để tránh quá yếu
                 if (dameqckk < 1000) {
                     dameqckk = 1000;
                 }
+
                 return dameqckk;
             case Skill.DE_TRUNG:
                 if (player.setClothes.pikkoroDaimao == 5) {
@@ -1435,15 +1433,14 @@ public class NPoint {
             percentDameIntrinsic = intrinsic.param1;
         }
         if (percentDameSkill != 0) {
-            long dameBound = (long)((dameAttack * percentDameSkill) / 100);
-            if(dameBound > 2_000_000_000){
-                dameBound = 2_000_000_000;
-            }
-            dameAttack = (int)dameBound;
+            int dameBound = Math.max(1, (int) ((long) dameAttack * percentDameSkill / 100));
+            dameAttack = (int) dameBound;
         }
 
         dameAttack += (dameAttack * percentDameIntrinsic / 100);
+
         dameAttack += (dameAttack * dameAfter / 100);
+
         if (this.player.effectSkill != null && this.player.effectSkill.isDameBuff && tlSexyDame == 0) {
             int tiLeDame = this.player.effectSkill.tileDameBuff;
             dameAttack += (int) (dameAttack * tiLeDame / 100L);
@@ -1464,13 +1461,7 @@ public class NPoint {
             dameAttack += (dameAttack / 100 * tlSDCM);
         }
 
-        dameAttack += (dameAttack  / 100 * percentXDame);
-
-        int tempDameAttack = (dameAttack / 100 * 5);
-        if (tempDameAttack <= 0) {
-            tempDameAttack = 1;
-        }
-        dameAttack += (Util.getOne(-1, 1) * Util.nextInt((int) tempDameAttack) + 1);
+        dameAttack += (dameAttack / 100 * percentXDame);
 
         if (player.effectSkin != null && player.effectSkin.isXChuong
                 && (player.playerSkill.skillSelect.template.id == Skill.KAMEJOKO
@@ -1483,7 +1474,7 @@ public class NPoint {
         }
 
         if (dameAttack > 2_000_000_000) {
-            dameAttack = 2_000_000_000; 
+            dameAttack = 2_000_000_000;
         }
 
         return (int) dameAttack;

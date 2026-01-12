@@ -3,7 +3,6 @@ package npc.list;
 /*
  * @Author: NgojcDev
  */
-
 import consts.ConstNpc;
 import dungeon.RedRibbonHQ;
 import services.RedRibbonHQService;
@@ -27,22 +26,25 @@ public class LinhCanh extends Npc {
                         "Chỉ tiếp các bang hội, miễn tiếp khách vãng lai");
                 return;
             }
-            if (player.clan.getMembers().size() < RedRibbonHQ.N_PLAYER_CLAN) {
-                NpcService.gI().createTutorial(player, tempId, this.avartar,
-                        "Bang hội phải có ít nhất 5 thành viên mới có thể tham gia");
-                return;
+            if (!player.getSession().isAdmin) {
+                if (player.clan.getMembers().size() < RedRibbonHQ.N_PLAYER_CLAN) {
+                    NpcService.gI().createTutorial(player, tempId, this.avartar,
+                            "Bang hội phải có ít nhất 5 thành viên mới có thể tham gia");
+                    return;
+                }
+                if (player.clanMember.getNumDateFromJoinTimeToToday() < 1) {
+                    NpcService.gI().createTutorial(player, tempId, this.avartar,
+                            "Gia nhập bang hội trên 2 ngày mới được tham gia");
+                    return;
+                }
             }
-            if (player.clanMember.getNumDateFromJoinTimeToToday() < 1) {
-                NpcService.gI().createTutorial(player, tempId, this.avartar,
-                        "Gia nhập bang hội trên 2 ngày mới được tham gia");
-                return;
-            }
+
             if (player.clan.doanhTrai != null) {
                 createOtherMenu(player, ConstNpc.MENU_JOIN_DOANH_TRAI,
                         "Bang hội của ngươi đang đánh trại độc nhãn\nThời gian còn lại là "
-                                + TimeUtil.getTimeLeft(player.clan.doanhTrai.getLastTimeOpen(),
-                                        RedRibbonHQ.TIME_DOANH_TRAI / 1000)
-                                + ". Ngươi có muốn tham gia không?",
+                        + TimeUtil.getTimeLeft(player.clan.doanhTrai.getLastTimeOpen(),
+                                RedRibbonHQ.TIME_DOANH_TRAI / 1000)
+                        + ". Ngươi có muốn tham gia không?",
                         "Tham gia", "Không", "Hướng\ndẫn\nthêm");
                 return;
             }
@@ -54,30 +56,33 @@ public class LinhCanh extends Npc {
                     nPlSameClan++;
                 }
             }
-            if (nPlSameClan < RedRibbonHQ.N_PLAYER_MAP) {
-                createOtherMenu(player, ConstNpc.IGNORE_MENU,
-                        "Ngươi phải có ít nhất " + RedRibbonHQ.N_PLAYER_MAP
-                                + " đồng đội cùng bang đứng gần mới có thể vào\n"
-                                + "tuy nhiên ta khuyên ngươi nên đi cùng với 3-4 người để khỏi chết. "
-                                + "Hahaha.",
-                        "OK", "Hướng\ndẫn\nthêm");
-                return;
-            }
-            if (player.clan.haveGoneDoanhTrai && !Util.isAfterMidnight(player.clan.lastTimeOpenDoanhTrai)) {
-                if (!Util.isAfterMidnight(player.lastTimeJoinDT)) {
-                    NpcService.gI().createTutorial(player, tempId, this.avartar,
-                            "Hôm nay bạn đã tham gia doanh trại rồi, hẹn gặp bạn vào ngày mai");
+            if (!player.getSession().isAdmin) {
+                if (nPlSameClan < RedRibbonHQ.N_PLAYER_MAP) {
+                    createOtherMenu(player, ConstNpc.IGNORE_MENU,
+                            "Ngươi phải có ít nhất " + RedRibbonHQ.N_PLAYER_MAP
+                            + " đồng đội cùng bang đứng gần mới có thể vào\n"
+                            + "tuy nhiên ta khuyên ngươi nên đi cùng với 3-4 người để khỏi chết. "
+                            + "Hahaha.",
+                            "OK", "Hướng\ndẫn\nthêm");
                     return;
                 }
-                createOtherMenu(player, ConstNpc.IGNORE_MENU,
-                        "Bang hội của ngươi ngày hôm nay đã vào 1 lần rồi (thành viên "
-                                + player.clan.playerOpenDoanhTrai.name + ") lúc "
-                                + TimeUtil.formatTime(player.clan.lastTimeOpenDoanhTrai, "HH:mm") + "\n"
-                                + "Nên ngươi không thể vào được nữa.\n"
-                                + "Hãy chờ đến ngày mai để có thể vào miễn phí",
-                        "OK", "Hướng\ndẫn\nthêm");
-                return;
+                if (player.clan.haveGoneDoanhTrai && !Util.isAfterMidnight(player.clan.lastTimeOpenDoanhTrai)) {
+                    if (!Util.isAfterMidnight(player.lastTimeJoinDT)) {
+                        NpcService.gI().createTutorial(player, tempId, this.avartar,
+                                "Hôm nay bạn đã tham gia doanh trại rồi, hẹn gặp bạn vào ngày mai");
+                        return;
+                    }
+                    createOtherMenu(player, ConstNpc.IGNORE_MENU,
+                            "Bang hội của ngươi ngày hôm nay đã vào 1 lần rồi (thành viên "
+                            + player.clan.playerOpenDoanhTrai.name + ") lúc "
+                            + TimeUtil.formatTime(player.clan.lastTimeOpenDoanhTrai, "HH:mm") + "\n"
+                            + "Nên ngươi không thể vào được nữa.\n"
+                            + "Hãy chờ đến ngày mai để có thể vào miễn phí",
+                            "OK", "Hướng\ndẫn\nthêm");
+                    return;
+                }
             }
+
             createOtherMenu(player, ConstNpc.MENU_JOIN_DOANH_TRAI,
                     "Hôm nay bang hội của ngươi chưa vào trại lần nào. Ngươi có muốn vào\nkhông?\nĐể vào, ta khuyên ngươi nên có 3-4 người cùng bang đi cùng.",
                     "Vào\n(miễn phí)", "Không", "Hướng\ndẫn\nthêm");

@@ -3,7 +3,7 @@ package services;
 /*
  * @Author: NgojcDev
  */
-
+import consts.ConstPlayer;
 import item.Item;
 import item.Item.ItemOption;
 import npc.MabuEgg;
@@ -18,6 +18,7 @@ import services.ChangeMapService;
 
 import java.util.ArrayList;
 import java.util.List;
+import player.Fusion;
 
 import services.BlackBallWarService;
 import services.ItemMapService;
@@ -362,7 +363,7 @@ public class InventoryService {
                 break;
             case 36:
                 index = 12;
-                break; 
+                break;
         }
         sItem = player.inventory.itemsBody.get(index);
         if (index == 8 || index == 11 || index == 12) {
@@ -1048,9 +1049,9 @@ public class InventoryService {
     public boolean x99ThucAn(Player player) {
         Item doAn = player.inventory.itemsBag.stream()
                 .filter(it -> it != null && it.template != null
-                        && (it.template.id == 663 || it.template.id == 664 || it.template.id == 665
-                        || it.template.id == 666 || it.template.id == 667)
-                        && it.quantity >= 99)
+                && (it.template.id == 663 || it.template.id == 664 || it.template.id == 665
+                || it.template.id == 666 || it.template.id == 667)
+                && it.quantity >= 99)
                 .findFirst().orElse(null);
         return doAn != null;
     }
@@ -1107,7 +1108,6 @@ public class InventoryService {
                 for (int option : selectedOptions) {
                     int newParam = 0;
 
-
                     if (option == 5) {                    // 5% - 20%
                         newParam = 5 + (int) (Math.random() * (20 - 5 + 1));   // [5..20]
                     } else if (option == 94) {            // 5% - 20%
@@ -1118,7 +1118,6 @@ public class InventoryService {
                         newParam = 5 + (int) (Math.random() * (18 - 5 + 1));   // [5..18]
                     } else if (option == 111) {           // phân tâm, không cần %
                         newParam = 0;
-
 
                     } else if (option == 8 || option == 14 || option == 108 || option == 94 || option == 108) {
                         newParam = 3 + (int) (Math.random() * 3);               // [3..5]
@@ -1137,7 +1136,6 @@ public class InventoryService {
             }
         }
     }
-
 
     private void checkOption231(Item item) {
         for (int i = 0; i < item.itemOptions.size(); i++) {
@@ -1321,7 +1319,43 @@ public class InventoryService {
     public boolean canDameBossHalloween(Player plAtt) {
         // get cai trang
         Item item = plAtt.inventory.itemsBody.get(5);
-        if (!item.isNotNullItem() || item.template == null) return false;
+        if (!item.isNotNullItem() || item.template == null) {
+            return false;
+        }
         return item.template.id == 1106 || item.template.id == 742 || item.template.id == 1105;
+    }
+
+    public void useBanhTrungThu(Player pl, Item item) {
+        // remove all item item banh trung thu
+        if (pl.itemTime.isUseBanhTrungThu) {
+            pl.itemTime.lastTimeUseBanhTrungThu = 0;
+            pl.itemTime.timeUseBanhTrungThu = 0;
+            pl.itemTime.isUseBanhTrungThu = false;
+            ItemTimeService.gI().sendItemTime(pl, pl.itemTime.ttIcon, 0);
+        }
+        int timeUseBanhTrungThu = getTimeUseBanhTrungThu(item);
+        // check xem type gi
+        pl.itemTime.lastTimeUseBanhTrungThu = System.currentTimeMillis();
+        pl.itemTime.timeUseBanhTrungThu = timeUseBanhTrungThu;
+        pl.itemTime.isUseBanhTrungThu = true;
+        pl.itemTime.ttIcon = item.template.iconID;
+        InventoryService.gI().subQuantityItemsBag(pl, item, 1);
+        InventoryService.gI().sendItemBags(pl);
+        ItemTimeService.gI().sendAllItemTime(pl);
+    }
+
+    public int getTimeUseBanhTrungThu(Item item) {
+        return switch (item.template.id) {
+            case 465 ->
+                60 * 60 * 1000;
+            case 466 ->
+                90 * 60 * 1000;
+            case 472 ->
+                120 * 60 * 1000;
+            case 473 ->
+                150 * 60 * 1000;
+            default ->
+                0;
+        };
     }
 }

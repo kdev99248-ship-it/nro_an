@@ -16,6 +16,8 @@ import consts.ConstAchievement;
 import item.Item;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import map.ItemMap;
 import map.Zone;
@@ -33,7 +35,6 @@ import utils.Util;
 
 // import java.util.ArrayList;
 // import java.util.List;
-
 import server.Client;
 import task.ClanTaskTemplate;
 
@@ -42,7 +43,6 @@ public class TaskService {
     /**
      * Làm cùng số người trong bang
      */
-
     private static services.TaskService i;
 
     public static services.TaskService gI() {
@@ -514,8 +514,7 @@ public class TaskService {
                             doneTask(player, ConstTask.TASK_28_3);
                     }
                     break;
-                case BossID.XEN_CON_1, BossID.XEN_CON_2, BossID.XEN_CON_3, BossID.XEN_CON_4, BossID.XEN_CON_5,
-                        BossID.XEN_CON_6, BossID.XEN_CON_7:
+                case BossID.XEN_CON_1, BossID.XEN_CON_2, BossID.XEN_CON_3, BossID.XEN_CON_4, BossID.XEN_CON_5, BossID.XEN_CON_6, BossID.XEN_CON_7:
                     doneTask(player, ConstTask.TASK_29_3);
                     break;
                 case BossID.SIEU_BO_HUNG:
@@ -573,53 +572,53 @@ public class TaskService {
                 case ConstMob.HEO_RUNG:
                 case ConstMob.HEO_DA_XANH:
                 case ConstMob.HEO_XAYDA:
-                    // if (player.clan != null) {
-                    //     List<Player> list = new ArrayList<>();
-                    //     List<Player> playersMap = player.zone.getPlayers();
-                    //     for (Player pl : playersMap) {
-                    //         if (pl != null && pl.clan != null && pl.clan.equals(player.clan)) {
-                    //             list.add(pl);
-                    //         }
-                    //     }
+                    if (player.clan != null) {
+                        List<Player> list = new ArrayList<>();
+                        List<Player> playersMap = player.zone.getPlayers();
+                        for (Player pl : playersMap) {
+                            if (pl != null && pl.clan != null && pl.clan.equals(player.clan)) {
+                                list.add(pl);
+                            }
+                        }
 
-                    //     if (list.size() >= NMEMBER_DO_TASK_TOGETHER) {
-                    //         // Nếu có người chơi cùng clan trong khu vực, mỗi người sẽ hoàn thành 2 nhiệm vụ
-                    //         for (Player pl : list) {
-                    //             switch (mob.tempId) {
-                    //                 case ConstMob.HEO_RUNG:
-                    //                     doneTask(pl, ConstTask.TASK_13_0); // Hoàn thành nhiệm vụ TASK_13_0
-                    //                     doneTask(pl, ConstTask.TASK_13_1); // Hoàn thành nhiệm vụ TASK_13_1 (nhiệm vụ kế
-                    //                                                                    // tiếp)
-                    //                     break;
-                    //                 case ConstMob.HEO_DA_XANH:
-                    //                     doneTask(pl, ConstTask.TASK_13_1); // Hoàn thành nhiệm vụ TASK_13_1
-                    //                     doneTask(pl, ConstTask.TASK_13_2); // Hoàn thành nhiệm vụ TASK_13_2 (nhiệm vụ kế
-                    //                                                                    // tiếp)
-                    //                     break;
-                    //                 case ConstMob.HEO_XAYDA:
-                    //                     doneTask(pl, ConstTask.TASK_13_2); // Hoàn thành nhiệm vụ TASK_13_2
-                    //                     doneTask(pl, ConstTask.TASK_13_3); // Hoàn thành nhiệm vụ TASK_13_3 (nhiệm vụ kế
-                    //                                                                    // tiếp)
-                    //                     break;
-                    //             }
-                    //         }
-                    //     } else {
-                    //         // Nếu không có đủ người chơi cùng clan, chỉ hoàn thành 1 nhiệm vụ
-                    //         for (Player pl : list) {
-                    //             switch (mob.tempId) {
-                    //                 case ConstMob.HEO_RUNG:
-                    //                     doneTask(pl, ConstTask.TASK_13_0); // Hoàn thành nhiệm vụ TASK_13_0
-                    //                     break;
-                    //                 case ConstMob.HEO_DA_XANH:
-                    //                     doneTask(pl, ConstTask.TASK_13_1); // Hoàn thành nhiệm vụ TASK_13_1
-                    //                     break;
-                    //                 case ConstMob.HEO_XAYDA:
-                    //                     doneTask(pl, ConstTask.TASK_13_2); // Hoàn thành nhiệm vụ TASK_13_2
-                    //                     break;
-                    //             }
-                    //         }
-                    //     }
-                    // }
+                        if (list.size() >= 2 ) {
+                            // Nếu có người chơi cùng clan trong khu vực, mỗi người sẽ hoàn thành 2 nhiệm vụ
+                            for (Player pl : list) {
+                                switch (mob.tempId) {
+                                    case ConstMob.HEO_RUNG:
+                                        doneTask(pl, ConstTask.TASK_13_0); // Hoàn thành nhiệm vụ TASK_13_0
+                                        doneTask(pl, ConstTask.TASK_13_1); // Hoàn thành nhiệm vụ TASK_13_1 (nhiệm vụ kế
+                                        // tiếp)
+                                        break;
+                                    case ConstMob.HEO_DA_XANH:
+                                        doneTask(pl, ConstTask.TASK_13_1); // Hoàn thành nhiệm vụ TASK_13_1
+                                        doneTask(pl, ConstTask.TASK_13_2); // Hoàn thành nhiệm vụ TASK_13_2 (nhiệm vụ kế
+                                        // tiếp)
+                                        break;
+                                    case ConstMob.HEO_XAYDA:
+                                        doneTask(pl, ConstTask.TASK_13_2); // Hoàn thành nhiệm vụ TASK_13_2
+                                        doneTask(pl, ConstTask.TASK_13_3); // Hoàn thành nhiệm vụ TASK_13_3 (nhiệm vụ kế
+                                        // tiếp)
+                                        break;
+                                }
+                            }
+                        } else {
+                            //         // Nếu không có đủ người chơi cùng clan, chỉ hoàn thành 1 nhiệm vụ
+                            for (Player pl : list) {
+                                switch (mob.tempId) {
+                                    case ConstMob.HEO_RUNG:
+                                        doneTask(pl, ConstTask.TASK_13_0); // Hoàn thành nhiệm vụ TASK_13_0
+                                        break;
+                                    case ConstMob.HEO_DA_XANH:
+                                        doneTask(pl, ConstTask.TASK_13_1); // Hoàn thành nhiệm vụ TASK_13_1
+                                        break;
+                                    case ConstMob.HEO_XAYDA:
+                                        doneTask(pl, ConstTask.TASK_13_2); // Hoàn thành nhiệm vụ TASK_13_2
+                                        break;
+                                }
+                            }
+                        }
+                    }
                     switch (mob.tempId) {
                         case ConstMob.HEO_RUNG:
                             doneTask(player, ConstTask.TASK_13_0); // Hoàn thành nhiệm vụ TASK_13_0
@@ -639,53 +638,51 @@ public class TaskService {
                 case ConstMob.BULON:
                 case ConstMob.UKULELE:
                 case ConstMob.QUY_MAP:
-                    // if (player.clan != null) {
-                    //     List<Player> list = new ArrayList<>();
-                    //     List<Player> playersMap = player.zone.getPlayers();
-                    //     for (Player pl : playersMap) {
-                    //         if (pl != null && pl.clan != null && pl.clan.equals(player.clan)) {
-                    //             list.add(pl);
-                    //         }
-                    //     }
+                     if (player.clan != null) {
+                         List<Player> list = new ArrayList<>();
+                         List<Player> playersMap = player.zone.getPlayers();
+                         for (Player pl : playersMap) {
+                             if (pl != null && pl.clan != null && pl.clan.equals(player.clan)) {
+                                 list.add(pl);
+                             }
+                         }
 
-                    //     if (list.size() >= NMEMBER_DO_TASK_TOGETHER) {
-
-                    //         for (Player pl : list) {
-                    //             switch (mob.tempId) {
-                    //                 case ConstMob.BULON:
-                    //                     doneTask(pl, ConstTask.TASK_15_1); // Hoàn thành nhiệm vụ TASK_15_1
-                    //                     doneTask(pl, ConstTask.TASK_15_2); // Hoàn thành nhiệm vụ TASK_15_2 (nhiệm vụ kế
-                    //                                                                    // tiếp)
-                    //                     break;
-                    //                 case ConstMob.UKULELE:
-                    //                     doneTask(pl, ConstTask.TASK_15_2); // Hoàn thành nhiệm vụ TASK_15_2
-                    //                     doneTask(pl, ConstTask.TASK_15_3); // Hoàn thành nhiệm vụ TASK_15_3 (nhiệm vụ kế
-                    //                                                                    // tiếp)
-                    //                     break;
-                    //                 case ConstMob.QUY_MAP:
-                    //                     doneTask(pl, ConstTask.TASK_15_3); // Hoàn thành nhiệm vụ TASK_15_3
-                    //                     doneTask(pl, ConstTask.TASK_15_4); // Hoàn thành nhiệm vụ TASK_15_4 (nhiệm vụ kế
-                    //                                                                    // tiếp)
-                    //                     break;
-                    //             }
-                    //         }
-                    //     } else {
-
-                    //         for (Player pl : list) {
-                    //             switch (mob.tempId) {
-                    //                 case ConstMob.BULON:
-                    //                     doneTask(pl, ConstTask.TASK_15_1); // Hoàn thành nhiệm vụ TASK_15_1
-                    //                     break;
-                    //                 case ConstMob.UKULELE:
-                    //                     doneTask(pl, ConstTask.TASK_15_2); // Hoàn thành nhiệm vụ TASK_15_2
-                    //                     break;
-                    //                 case ConstMob.QUY_MAP:
-                    //                     doneTask(pl, ConstTask.TASK_15_3); // Hoàn thành nhiệm vụ TASK_15_3
-                    //                     break;
-                    //             }
-                    //         }
-                    //     }
-                    // }
+                         if (list.size() >= 2) {
+                             for (Player pl : list) {
+                                 switch (mob.tempId) {
+                                     case ConstMob.BULON:
+                                         doneTask(pl, ConstTask.TASK_15_1); // Hoàn thành nhiệm vụ TASK_15_1
+                                         doneTask(pl, ConstTask.TASK_15_2); // Hoàn thành nhiệm vụ TASK_15_2 (nhiệm vụ kế
+                                                                                        // tiếp)
+                                         break;
+                                     case ConstMob.UKULELE:
+                                         doneTask(pl, ConstTask.TASK_15_2); // Hoàn thành nhiệm vụ TASK_15_2
+                                         doneTask(pl, ConstTask.TASK_15_3); // Hoàn thành nhiệm vụ TASK_15_3 (nhiệm vụ kế
+                                                                                        // tiếp)
+                                         break;
+                                     case ConstMob.QUY_MAP:
+                                         doneTask(pl, ConstTask.TASK_15_3); // Hoàn thành nhiệm vụ TASK_15_3
+                                         doneTask(pl, ConstTask.TASK_15_4); // Hoàn thành nhiệm vụ TASK_15_4 (nhiệm vụ kế
+                                                                                        // tiếp)
+                                         break;
+                                 }
+                             }
+                         } else {
+                             for (Player pl : list) {
+                                 switch (mob.tempId) {
+                                     case ConstMob.BULON:
+                                         doneTask(pl, ConstTask.TASK_15_1); // Hoàn thành nhiệm vụ TASK_15_1
+                                         break;
+                                     case ConstMob.UKULELE:
+                                         doneTask(pl, ConstTask.TASK_15_2); // Hoàn thành nhiệm vụ TASK_15_2
+                                         break;
+                                     case ConstMob.QUY_MAP:
+                                         doneTask(pl, ConstTask.TASK_15_3); // Hoàn thành nhiệm vụ TASK_15_3
+                                         break;
+                                 }
+                             }
+                         }
+                     }
                     switch (mob.tempId) {
                         case ConstMob.BULON:
                             doneTask(player, ConstTask.TASK_15_1); // Hoàn thành nhiệm vụ TASK_15_1
@@ -804,9 +801,9 @@ public class TaskService {
                 case ConstTask.TASK_0_5:
                     npcSay(player, ConstTask.NPC_NHA,
                             "Tốt lắm, Rađa sẽ giúp con biết được HP và KI của mình ở góc trên màn hình\n"
-                                    + "Đậu thần sẽ giúp con phục hồi HP và KI khi con yếu đi\n"
-                                    + "Bây giờ, con hãy ra Làng Kakarot để tập luyện, hãy đánh ngã 5 mộc nhân, rồi trở về gặp ta, ta sẽ dạy con bay\n"
-                                    + "Đi đi, và về sớm con nhé!");
+                            + "Đậu thần sẽ giúp con phục hồi HP và KI khi con yếu đi\n"
+                            + "Bây giờ, con hãy ra Làng Kakarot để tập luyện, hãy đánh ngã 5 mộc nhân, rồi trở về gặp ta, ta sẽ dạy con bay\n"
+                            + "Đi đi, và về sớm con nhé!");
                     break;
                 case ConstTask.TASK_1_0:
                     if (isCurrentTask(player, idTaskCustom)) {
@@ -830,14 +827,14 @@ public class TaskService {
                 case ConstTask.TASK_1_1:
                     npcSay(player, ConstTask.NPC_NHA,
                             "Thể lực của con cũng khá tốt\n"
-                                    + "Con à, dạo gần đây dân làng của chúng ta gặp phải vài chuyện\n"
-                                    + "Bên cạnh làng ta đột nhiên xuất hiện lũ quái vật\n"
-                                    + "Nó tàn sát dân làng và phá hoại nông sản làng ta\n"
-                                    + "Con hãy tìm đánh chúng và đem về đây 10 cái đùi gà, 2 ông cháu mình sẽ để dành ăn dần\n"
-                                    + "Đây là tấm bản đồ của vùng này, con hãy xem để tìm đến %3\n"
-                                    + "Con có thể sử dụng đậu thần khi hết HP hoặc KI, bằng cách nhấn vào nút có hình trái tim "
-                                    + "bên góc phải dưới màn hình\n"
-                                    + "Nhanh lên, ông đói lắm rồi");
+                            + "Con à, dạo gần đây dân làng của chúng ta gặp phải vài chuyện\n"
+                            + "Bên cạnh làng ta đột nhiên xuất hiện lũ quái vật\n"
+                            + "Nó tàn sát dân làng và phá hoại nông sản làng ta\n"
+                            + "Con hãy tìm đánh chúng và đem về đây 10 cái đùi gà, 2 ông cháu mình sẽ để dành ăn dần\n"
+                            + "Đây là tấm bản đồ của vùng này, con hãy xem để tìm đến %3\n"
+                            + "Con có thể sử dụng đậu thần khi hết HP hoặc KI, bằng cách nhấn vào nút có hình trái tim "
+                            + "bên góc phải dưới màn hình\n"
+                            + "Nhanh lên, ông đói lắm rồi");
                     break;
                 // --------------------------------------------------------------
                 case ConstTask.TASK_2_0:
@@ -869,8 +866,8 @@ public class TaskService {
                     Service.gI().dropItemMapForMe(player, player.zone.getItemMapByTempId(74));
                     npcSay(player, ConstTask.NPC_NHA,
                             "Tốt lắm, đùi gà đây rồi, haha. Ông sẽ nướng tại đống lửa gần kia con có thể ăn bất cứ lúc nào nếu muốn\n"
-                                    + "À cháu này, vừa nãy ông có nghe thấy 1 tiếng động lớn, hình như có 1 vật thể rơi tại %5, con hãy đến kiểm tra xem\n"
-                                    + "Con cũng có thể dùng tiềm năng bản thân để nâng HP, KI hoặc sức đánh");
+                            + "À cháu này, vừa nãy ông có nghe thấy 1 tiếng động lớn, hình như có 1 vật thể rơi tại %5, con hãy đến kiểm tra xem\n"
+                            + "Con cũng có thể dùng tiềm năng bản thân để nâng HP, KI hoặc sức đánh");
                     break;
                 // --------------------------------------------------------------
                 case ConstTask.TASK_3_0:
@@ -890,10 +887,10 @@ public class TaskService {
                     Service.gI().sendFlagBag(player);
                     npcSay(player, ConstTask.NPC_NHA,
                             "Có em bé trong phi thuyền rơi xuống à, ông cứ tưởng là sao băng chứ\n"
-                                    + "Ông sẽ đặt tên cho em nó là Goku, từ giờ nó sẽ là thành viên trong gia đình ta\n"
-                                    + "Nãy ông mới nhận được tin có bầy mãnh thú xuất hiện tại Trạm phi thuyền\n"
-                                    + "Bọn chúng vừa đổ bộ xuống trái đất để trả thù việc con sát hại con chúng\n"
-                                    + "Con hãy đi tiêu diệt chúng để giúp dân làng tại đó luôn nhé");
+                            + "Ông sẽ đặt tên cho em nó là Goku, từ giờ nó sẽ là thành viên trong gia đình ta\n"
+                            + "Nãy ông mới nhận được tin có bầy mãnh thú xuất hiện tại Trạm phi thuyền\n"
+                            + "Bọn chúng vừa đổ bộ xuống trái đất để trả thù việc con sát hại con chúng\n"
+                            + "Con hãy đi tiêu diệt chúng để giúp dân làng tại đó luôn nhé");
                     break;
                 // --------------------------------------------------------------
                 case ConstTask.TASK_4_0:
@@ -995,10 +992,10 @@ public class TaskService {
                 case ConstTask.TASK_6_3:
                     npcSay(player, ConstTask.NPC_NHA,
                             "Ông rất tự hào về con\n"
-                                    + "Ông cho con cuốn bí kíp này để nâng cao võ học\n"
-                                    + "Hãy dùng sức mạnh của mình trừ gian diệt ác bảo vệ dân lành con nhé\n"
-                                    + "Bây giờ con hãy đi tập luyện đi, khi nào mạnh hơn thì quay về đây ông giao cho nhiệm vụ mới\n"
-                                    + "Đi đi..");
+                            + "Ông cho con cuốn bí kíp này để nâng cao võ học\n"
+                            + "Hãy dùng sức mạnh của mình trừ gian diệt ác bảo vệ dân lành con nhé\n"
+                            + "Bây giờ con hãy đi tập luyện đi, khi nào mạnh hơn thì quay về đây ông giao cho nhiệm vụ mới\n"
+                            + "Đi đi..");
                     break;
                 // --------------------------------------------------------------
                 case ConstTask.TASK_7_0:
@@ -1100,15 +1097,15 @@ public class TaskService {
                             "Xem ra cậu đã mạnh hơn lần trước tôi gặp rồi đó cậu có muốn thách đấu tại tên Tàu Pảy Pảy không?");
                     Service.gI().sendThongBao(player, "Lười làm boss tàu 77");
 
-                    // new Thread(() -> {
-                    // try {
-                    // Thread.sleep(1000);
-                    // TrainingService.gI().callBoss(player, BossID.TAUPAYPAY, true);
-                    // } catch (InterruptedException e) {
-                    // e.printStackTrace();
-                    // }
-                    // }).start();
-                    // break;
+                // new Thread(() -> {
+                // try {
+                // Thread.sleep(1000);
+                // TrainingService.gI().callBoss(player, BossID.TAUPAYPAY, true);
+                // } catch (InterruptedException e) {
+                // e.printStackTrace();
+                // }
+                // }).start();
+                // break;
                 case ConstTask.TASK_10_2:
                     npcSay(player, ConstNpc.BO_MONG,
                             "Cám ơn đã giúp chúng tôi. Xin hãy nhận viên ngọc rồng 6 sao này như món quà cám ơn");
@@ -1127,11 +1124,11 @@ public class TaskService {
                 case ConstTask.TASK_10_3:
                     npcSay(player, ConstTask.NPC_NHA,
                             "Ta thật sự hãnh diện về con. Giờ ta không còn gì để dạy cho con, nhưng có người còn giỏi hơn ta\n"
-                                    + "Đó là sư phụ của ta "
-                                    + (player.gender == ConstPlayer.TRAI_DAT ? "Quy Lão Kame"
-                                            : (player.gender == ConstPlayer.NAMEC ? "Trưởng lão Guru" : "Vua Vegeta"))
-                                    + ", ngài rất thích đọc truyện Đôrêmon, con hãy đem tới cho ngài\n"
-                                    + "Nhất định ngài sẽ thu nhận con làm đệ tử, con ráng học thành tài nhé");
+                            + "Đó là sư phụ của ta "
+                            + (player.gender == ConstPlayer.TRAI_DAT ? "Quy Lão Kame"
+                                    : (player.gender == ConstPlayer.NAMEC ? "Trưởng lão Guru" : "Vua Vegeta"))
+                            + ", ngài rất thích đọc truyện Đôrêmon, con hãy đem tới cho ngài\n"
+                            + "Nhất định ngài sẽ thu nhận con làm đệ tử, con ráng học thành tài nhé");
                     Item truyentranh = ItemService.gI().createNewItem((short) 85);
                     InventoryService.gI().addItemBag(player, truyentranh);
                     InventoryService.gI().sendItemBags(player);
@@ -1280,7 +1277,7 @@ public class TaskService {
                 case ConstTask.TASK_19_2:
                     npcSay(player, ConstTask.NPC_QUY_LAO,
                             "Con làm rất tốt, Trung Úy Trắng đã bị tiêu diệt. Ta có quà dành cho con");
-                    // ==========================================================================
+                // ==========================================================================
                 case ConstTask.TASK_20_7:
                     npcSay(player, ConstTask.NPC_QUY_LAO, "Tốt lắm, giờ con hãy đi tiêu diệt lũ đệ tử của Fide cho ta");
                     break;
@@ -1361,9 +1358,9 @@ public class TaskService {
                 case ConstTask.TASK_24_1:
                     npcSay(player, ConstNpc.CALICK,
                             "Chào chú, thực ra cháu không phải là người của thời đại này mà là người của...\n"
-                                    + "Tương lai 20 năm sắp tới\n Tên cháu là Ca lích! người Xayda\nCháu đến đây bằng 'Cổ máy thời gian'\n"
-                                    + "Bố mẹ cháu vốn là bạn thân của chú\n Họ chính là Ca Đíc và Bunma!\n"
-                                    + "Đây là thuốc trợ tim dành cho chú Sôngôku\n nhờ chú đưa cho Quy Lão giùm cháu nhé, cám ơn chú");
+                            + "Tương lai 20 năm sắp tới\n Tên cháu là Ca lích! người Xayda\nCháu đến đây bằng 'Cổ máy thời gian'\n"
+                            + "Bố mẹ cháu vốn là bạn thân của chú\n Họ chính là Ca Đíc và Bunma!\n"
+                            + "Đây là thuốc trợ tim dành cho chú Sôngôku\n nhờ chú đưa cho Quy Lão giùm cháu nhé, cám ơn chú");
                     break;
                 case ConstTask.TASK_24_2:
                     npcSay(player, ConstNpc.QUY_LAO_KAME, "Hô hô hô, cám ơn cậu...\n"
@@ -1519,7 +1516,7 @@ public class TaskService {
                             + "Capsule kì bí không chừng lại có ích\n"
                             + "Hãy thu thập 1 ít để phòng thân");
 
-                    // =============================================================
+                // =============================================================
                 case ConstTask.TASK_29_0:
                     npcSay(player, ConstNpc.THAN_MEO_KARIN, "Wow sức mạnh của con giờ không thể đo đếm được nữa rồi\n"
                             + "Nhưng Xên Bọ Hung vẫn còn nhỉnh hơn con 1 tí");
@@ -1639,7 +1636,7 @@ public class TaskService {
         player.playerTask.taskMain.subTasks.get(player.playerTask.taskMain.index).count += numDone;
         if (player.playerTask.taskMain.subTasks
                 .get(player.playerTask.taskMain.index).count >= player.playerTask.taskMain.subTasks
-                        .get(player.playerTask.taskMain.index).maxCount) {
+                .get(player.playerTask.taskMain.index).maxCount) {
             player.playerTask.taskMain.index++;
             if (player.playerTask.taskMain.index >= player.playerTask.taskMain.subTasks.size()) {
                 this.sendNextTaskMain(player);

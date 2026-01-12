@@ -203,7 +203,7 @@ public class AlyraManager {
         try {
             HikariConfig config = new HikariConfig();
             config.setDriverClassName(DRIVER);
-            config.setJdbcUrl(String.format(CONNECTION_STRING, DB_HOST, DB_PORT, databaseName));
+            config.setJdbcUrl(String.format(MYSQL_CONNECTION_STRING, DB_HOST, DB_PORT, databaseName));
             config.setUsername(DB_USER);
             config.setPassword(DB_PASSWORD);
             config.setMinimumIdle(MIN_CONN);

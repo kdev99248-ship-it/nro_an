@@ -32,6 +32,8 @@ public class XenBoHung extends Boss {
             ItemMap it = new ItemMap(this.zone, 16, 1, this.location.x, this.location.y, plKill.id);
             Service.gI().dropItemMap(this.zone, it);
         }
+        ItemMap it = new ItemMap(this.zone, 457, 1, this.location.x, this.location.y, plKill.id);
+        Service.gI().dropItemMap(this.zone, it);
 
         TaskService.gI().checkDoneTaskKillBoss(plKill, this);
     }

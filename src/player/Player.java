@@ -67,9 +67,7 @@ import server.Maintenance;
 import utils.LearnSkill;
 
 public class Player implements Runnable {
-
     public long lastTimeEatPea;
-
     @Setter
     @Getter
     private MySession session;
@@ -867,6 +865,7 @@ public class Player implements Runnable {
     }
 
     public synchronized int injured(Player plAtt, int damage, boolean piercing, boolean isMobAttack) {
+        damage= Math.abs(damage);
         if (!this.isDie()) {
             if (plAtt != null && !plAtt.equals(this)) {
                 setTemporaryEnemies(plAtt);

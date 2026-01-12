@@ -56,7 +56,7 @@ public class PhaLeHoaTrangBi {
     private static void processPhaLeHoa(Player player, Item item, int star) {
         player.combineNew.goldCombine = CombineSystem.getGoldPhaLeHoa(star);
         player.combineNew.gemCombine = CombineSystem.getGemPhaLeHoa(star);
-        player.combineNew.ratioCombine = CombineSystem.getRatioPhaLeHoa(star);
+        player.combineNew.ratioCombine = Math.min(CombineSystem.getRatioPhaLeHoa(star) * 3, 100);
 
         String npcSay = item.template.name + "\n|2|";
         for (Item.ItemOption io : item.itemOptions) {

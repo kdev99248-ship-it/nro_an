@@ -43,6 +43,11 @@ public class ItemTimeService {
             sendItemTime(player, player.gender == ConstPlayer.NAMEC ? 3901 : 3790,
                     (int) ((Fusion.TIME_FUSION - (System.currentTimeMillis() - player.fusion.lastTimeFusion)) / 1000));
         }
+        if(player.itemTime.isUseBanhTrungThu){
+            Logger.log(player.itemTime.ttIcon + ":" + ((player.itemTime.timeUseBanhTrungThu - (System.currentTimeMillis() - player.itemTime.lastTimeUseBanhTrungThu)) / 1000) );
+            sendItemTime(player, player.itemTime.ttIcon,
+                    (int) ((player.itemTime.timeUseBanhTrungThu - (System.currentTimeMillis() - player.itemTime.lastTimeUseBanhTrungThu)) / 1000));
+        }
         if (player.itemTime.isUseBoHuyet) {
             sendItemTime(player, 2755,
                     (int) ((TIME_ITEM - (System.currentTimeMillis() - player.itemTime.lastTimeBoHuyet)) / 1000));

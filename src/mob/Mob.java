@@ -5,6 +5,7 @@ package mob;
  */
 
 import author_ngojc.DragonRun;
+import combine.CombineService;
 import services.InventoryService;
 import services.Service;
 import services.TaskService;
@@ -589,6 +590,7 @@ public class Mob {
                 }
             }
         }
+
         if (mapid == 5 || mapid == 13) {
             Player pl = player;
             if (pl.isPet) {
@@ -636,12 +638,17 @@ public class Mob {
         // =============================== MOB REWARD
         // ========================Capsul Kì Bí========================
         if (player.itemTime.isUseMayDo
-                && (Util.isTrue(10, 100)
-                || (player.isActive() && Util.isTrue(10, 100)))
+                && (Util.isTrue(1, 100)
+                || (player.isActive() && Util.isTrue(3, 100)))
                 && this.tempId > 57 && this.tempId < 66) {
             list.add(new ItemMap(zone, 380, 1, x, yEnd, player.id));
         }
 
+        if (Util.isTrue(1, 500)) {
+            ItemMap splItem = new ItemMap(zone, Util.nextInt(441, 447), 1, x, yEnd, player.id);
+            splItem.options.add(getParamSPL(splItem.itemTemplate.id));
+            list.add(splItem);
+        }
         // ========================TASK========================
         if (player.isPl() && TaskService.gI().getIdTask(player) == ConstTask.TASK_8_1) {
             if (player.gender == 0 && this.tempId == 11 || player.gender == 1 && this.tempId == 12
@@ -1010,25 +1017,25 @@ public class Mob {
             }
         }
 
-        // Mảnh đá vụn cho bản đồ Doanh Trại
-        if (MapService.gI().isMapDoanhTrai(mapid)
-                && (Util.isTrue(1, 10000)
-                || (Manager.TEST && Util.isTrue(1, 5))
-                || (player.isActive() && Util.isTrue(1, 10)))) {
-            ItemMap it = new ItemMap(zone, 225, 1, x, yEnd, player.id);
-            it.options.add(new Item.ItemOption(74, 0));
-            list.add(it);
-        }
-
-        // Mảnh đá vụn cho bản đồ 3 Planets (tỷ lệ khác)
-        if (MapService.gI().isMap3Planets(mapid)
-                && (Util.isTrue(1, 500)
-                || (Manager.TEST && Util.isTrue(1, 10))
-                || (player.isActive() && Util.isTrue(1, 250)))) {
-            ItemMap it = new ItemMap(zone, 225, 1, x, yEnd, player.id);
-            it.options.add(new Item.ItemOption(74, 0));
-            list.add(it);
-        }
+//        // Mảnh đá vụn cho bản đồ Doanh Trại
+//        if (MapService.gI().isMapDoanhTrai(mapid)
+//                && (Util.isTrue(1, 10000)
+//                || (Manager.TEST && Util.isTrue(1, 5))
+//                || (player.isActive() && Util.isTrue(1, 10)))) {
+//            ItemMap it = new ItemMap(zone, 225, 1, x, yEnd, player.id);
+//            it.options.add(new Item.ItemOption(74, 0));
+//            list.add(it);
+//        }
+//
+//        // Mảnh đá vụn cho bản đồ 3 Planets (tỷ lệ khác)
+//        if (MapService.gI().isMap3Planets(mapid)
+//                && (Util.isTrue(1, 500)
+//                || (Manager.TEST && Util.isTrue(1, 10))
+//                || (player.isActive() && Util.isTrue(1, 250)))) {
+//            ItemMap it = new ItemMap(zone, 225, 1, x, yEnd, player.id);
+//            it.options.add(new Item.ItemOption(74, 0));
+//            list.add(it);
+//        }
 
         // Kiểm tra nếu map nằm trong danh sách các map cần áp dụng xác suất
         if (MapService.gI().isMap3Planets(mapid)
@@ -1060,6 +1067,19 @@ public class Mob {
         }
 
         return list;
+    }
+
+    private Item.ItemOption getParamSPL(short id) {
+        return switch (id) {
+            case 441 -> new Item.ItemOption(95, 5);
+            case 442 -> new Item.ItemOption(96, 5);
+            case 443 -> new Item.ItemOption(97, 5);
+            case 444 -> new Item.ItemOption(98, 5);
+            case 445 -> new Item.ItemOption(99, 5);
+            case 446 -> new Item.ItemOption(100, 5);
+            case 447 -> new Item.ItemOption(101, 5);
+            default -> new Item.ItemOption(30, 0);
+        };
     }
 
     private ItemMap dropItemTask(Player player) {

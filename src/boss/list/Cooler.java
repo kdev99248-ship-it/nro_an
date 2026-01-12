@@ -29,7 +29,7 @@ public class Cooler extends Boss {
     @Override
     public void reward(Player plKill) {
           // DTL
-        if (Util.isTrue(15, 100)) {
+        if (Util.isTrue(30, 100)) {
             ItemMap it = ItemService.gI().randDoTL(this.zone, 1, this.location.x,
                     this.zone.map.yPhysicInTop(this.location.x,
                             this.location.y - 24),

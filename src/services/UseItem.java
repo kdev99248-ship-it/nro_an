@@ -281,6 +281,11 @@ public class UseItem {
                         Service.gI().sendPetFollow(pl, (short) (item.template.iconID - 1));
                         break;
                     }
+                    case 31:{
+                        // use banh trung thu
+                        InventoryService.gI().useBanhTrungThu(pl,item);
+                        break;
+                    }
                     case 99:
                     case 98: {
                         InventoryService.gI().itemBagToBody(pl, indexBag);
@@ -2092,9 +2097,9 @@ public class UseItem {
             return;
         }
         Item caiTrang = ItemService.gI().createNewItem((short) 884);
-        int sdValue = Util.nextInt(1, 18);
+        int sdValue = Util.nextInt(1, 25);
         caiTrang.itemOptions.add(new Item.ItemOption(50, sdValue));
-        int sdcmValue = Util.nextInt(1, 110);
+        int sdcmValue = Util.nextInt(1, 50);
         caiTrang.itemOptions.add(new Item.ItemOption(5, sdcmValue));
         if (Util.isTrue(90, 100)) {
             int hsdValue = Util.nextInt(1, 3);

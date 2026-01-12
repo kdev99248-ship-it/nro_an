@@ -3,6 +3,7 @@ package combine;
 /*
  * @Author: NgojcDev
  */
+
 import item.Item;
 
 public class CombineSystem {
@@ -48,49 +49,33 @@ public class CombineSystem {
 
     public static int getOptionDaPhaLe(Item daPhaLe) {
         if (daPhaLe.template.type == 30) {
-            return daPhaLe.itemOptions.get(0).optionTemplate.id;
+            return daPhaLe.itemOptions.getFirst().optionTemplate.id;
         }
         return switch (daPhaLe.template.id) {
-            case 20 ->
-                77;
-            case 19 ->
-                103;
-            case 18 ->
-                80;
-            case 17 ->
-                81;
-            case 16 ->
-                50;
-            case 15 ->
-                94;
-            case 14 ->
-                108;
-            default ->
-                -1;
+            case 20 -> 77;
+            case 19 -> 103;
+            case 18 -> 80;
+            case 17 -> 81;
+            case 16 -> 50;
+            case 15 -> 94;
+            case 14 -> 108;
+            default -> -1;
         };
     }
 
     public static int getParamDaPhaLe(Item daPhaLe) {
         if (daPhaLe.template.type == 30) {
-            return daPhaLe.itemOptions.get(0).param;
+            return daPhaLe.itemOptions.getFirst().param;
         }
         return switch (daPhaLe.template.id) {
-            case 20 ->
-                5;
-            case 19 ->
-                5;
-            case 18 ->
-                5;
-            case 17 ->
-                5;
-            case 16 ->
-                3;
-            case 15 ->
-                2;
-            case 14 ->
-                2;
-            default ->
-                -1;
+            case 20 -> 5;
+            case 19 -> 5;
+            case 18 -> 5;
+            case 17 -> 5;
+            case 16 -> 3;
+            case 15 -> 2;
+            case 14 -> 2;
+            default -> -1;
         };
     }
 
@@ -126,7 +111,7 @@ public class CombineSystem {
         return 0;
     }
 
- public static float getRatioPhaLeHoa(int star) {
+    public static float getRatioPhaLeHoa(int star) {
         switch (star) {
             case 0:
                 return 50f;

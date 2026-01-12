@@ -32,7 +32,7 @@ public class Chiller extends Boss{
     }
     @Override
     public void reward(Player plKill) {
-        boolean hasRatioItem = Util.isTrue(20,100);
+        boolean hasRatioItem = Util.isTrue(30,100);
         short[][] idItemHanhTinh = {
                     {555, 556, 562, 563, 561},
                     {559, 560, 566, 567, 561},

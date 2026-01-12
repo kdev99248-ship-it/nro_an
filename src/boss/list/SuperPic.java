@@ -22,26 +22,28 @@ import services.SkillService;
 import services.TaskService;
 import utils.Util;
 
-public class SuperPic extends Boss{
-long st;
+public class SuperPic extends Boss {
+
+    long st;
+
     public SuperPic() throws Exception {
         super(BossID.SUPER_PIC, BossesData.SUPER_PIC);
     }
-    
+
     @Override
     public void reward(Player plKill) {
-        short[][] ratioItem = new short[][]{{16,20,1},{674,10,1},{457,100,2}};
+        short[][] ratioItem = new short[][]{{16, 20, 1}, {674, 10, 1}, {457, 100, 2}};
         for (short[] ratioI : ratioItem) {
-            if(Util.isTrue(ratioI[1],100)){
-               InventoryService.gI().addItemBag(plKill, ItemService.gI().createNewItem(ratioI[0],ratioI[2]));
+            if (Util.isTrue(ratioI[1], 100)) {
+                InventoryService.gI().addItemBag(plKill, ItemService.gI().createNewItem(ratioI[0], ratioI[2]));
             }
         }
         InventoryService.gI().sendItemBags(plKill);
     }
-    
+
     @Override
     public void joinMap() {
-        this.name = this.name +" "+ Util.nextInt(1,100);
+        this.name = this.name + " " + Util.nextInt(1, 100);
         super.joinMap();
         st = System.currentTimeMillis();
     }
@@ -55,7 +57,7 @@ long st;
             st = System.currentTimeMillis();
         }
     }
-    
+
     @Override
     public void attack() {
         if (Util.canDoWithTime(this.lastTimeAttack, 100) && this.typePk == ConstPlayer.PK_ALL) {
@@ -87,6 +89,7 @@ long st;
             }
         }
     }
+
     @Override
     public synchronized int injured(Player plAtt, int damage, boolean piercing, boolean isMobAttack) {
         if (!this.isDie()) {
