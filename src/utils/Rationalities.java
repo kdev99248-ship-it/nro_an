@@ -15,7 +15,7 @@ public class Rationalities {
     private static final int[][] ITEM_OPTION_CS_SD = new int[][]{
             {1200, 1600}, {2400, 3200}, {5000, 9000}
     };
-    public static int[] RATIO_DROP_GOLD_KEY = new int[]{1, 1_000_000};
+    public static int[] RATIO_DROP_GOLD_KEY = new int[]{100, 1_000_000};
 
     public static int[][] ITEM_ID_DROP_IN_VIP_CHEST_TD = new int[][]{
             {232, 244, 256, 268, 280}, {233, 245, 257, 269, 281}, {555, 556, 561, 562, 563}
