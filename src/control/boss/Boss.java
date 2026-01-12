@@ -313,17 +313,13 @@ public class Boss extends Player implements IBoss {
 //            case CHAT_S, AFK, ACTIVE ->
 //                this.autoLeaveMap();
 //        }
-        if (Util.canDoWithTime(lastTimeNotify, TIME_NOTIFY)) {
-            if (bossStatus == BossStatus.REST) {
-                changeStatus(BossStatus.RESPAWN);
-            }
-            lastTimeNotify = System.currentTimeMillis();
-        }
+
         switch (this.bossStatus) {
             case REST -> this.rest();
             case RESPAWN -> {
                 this.respawn();
                 this.changeStatus(BossStatus.JOIN_MAP);
+                lastTimeNotify = System.currentTimeMillis();
             }
             case JOIN_MAP -> this.joinMap();
             case CHAT_S -> {
@@ -352,6 +348,12 @@ public class Boss extends Player implements IBoss {
                 }
             }
             case LEAVE_MAP -> this.leaveMap();
+        }
+        if (Util.canDoWithTime(lastTimeNotify, TIME_NOTIFY)) {
+            if (bossStatus == BossStatus.REST) {
+                changeStatus(BossStatus.RESPAWN);
+            }
+            lastTimeNotify = System.currentTimeMillis();
         }
     }
 
