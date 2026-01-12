@@ -4,6 +4,7 @@ package boss.list;
  * @Author: NgojcDev
  */
 
+import consts.BossStatus;
 import consts.ConstPlayer;
 import control.boss.Boss;
 import control.boss.BossesData;
@@ -40,6 +41,14 @@ public class XenBoHung extends Boss {
     }
 
     @Override
+    public void update() {
+        super.update();
+        if (bossStatus == BossStatus.AFK || bossStatus == BossStatus.CHAT_E) {
+            changeStatus(BossStatus.ACTIVE);
+        }
+    }
+
+    @Override
     public void active() {
         if (this.typePk == ConstPlayer.NON_PK) {
             this.changeToTypePK();
@@ -58,19 +67,17 @@ public class XenBoHung extends Boss {
             return;
         }
         ChangeMapService.gI().changeMapYardrat(this, this.zone, pl.location.x, pl.location.y);
-        if (this.nPoint.hpg < 200_000_000) {
-            this.nPoint.dameg += (pl.nPoint.dame * 5 / 100);
-            this.nPoint.hpg += (pl.nPoint.hp * 2 / 100);
-            this.nPoint.critg++;
-            this.nPoint.calPoint();
-            PlayerService.gI().hoiPhuc(this, pl.nPoint.hp, 0);
-            pl.injured(null, pl.nPoint.hpMax, true, false);
-            Service.gI().sendThongBao(pl, "Bạn vừa bị " + this.name + " hấp thu!");
-            this.chat(2, "Ui cha cha, kinh dị quá. " + pl.name + " vừa bị tên " + this.name + " nuốt chửng kìa!!!");
-            this.chat("Haha, ngọt lắm đấy " + pl.name + "..");
-            this.lastTimeHapThu = System.currentTimeMillis();
-            this.timeHapThu = Util.nextInt(10000, 20000);
-        }
+        this.nPoint.dameg += (pl.nPoint.dame * 5 / 100);
+        this.nPoint.hpg += (pl.nPoint.hp * 2 / 100);
+        this.nPoint.critg++;
+        this.nPoint.calPoint();
+        PlayerService.gI().hoiPhuc(this, pl.nPoint.hp, 0);
+        pl.injured(null, pl.nPoint.hpMax, true, false);
+        Service.gI().sendThongBao(pl, "Bạn vừa bị " + this.name + " hấp thu!");
+        this.chat(2, "Ui cha cha, kinh dị quá. " + pl.name + " vừa bị tên " + this.name + " nuốt chửng kìa!!!");
+        this.chat("Haha, ngọt lắm đấy " + pl.name + "..");
+        this.lastTimeHapThu = System.currentTimeMillis();
+        this.timeHapThu = Util.nextInt(10000, 20000);
     }
 
     @Override
